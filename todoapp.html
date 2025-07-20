@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fancy To-Do App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #333;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .input-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 70%;
+      border: none;
+      border-radius: 5px 0 0 5px;
+      outline: none;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      background: #fff;
+      cursor: pointer;
+      border-radius: 0 5px 5px 0;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #eee;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 5px;
+      display: flex;
+      [1:23 am, 20/07/2025] Chat Gpt: justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    li.done {
+      text-decoration: line-through;
+      background: #d4edda;
+      color: #555;
+    }
+    .actions button {
+      margin-left: 10px;
+      background: transparent;
+      color: #555;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 My Fancy To-Do List</h1>
+
+  <div class="input-container">
+    <input type="text" id="taskInput" placeholder="Enter a new task..." />
+    <button onclick="addTask()">Add</button>
+  </div>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        if (task.done) li.classList.add('done');
+
+        li.textContent = task.text;
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = task.done ? '↺' : '✔';
+[1:23 am, 20/07/2025] Chat Gpt: toggleBtn.onclick = () => toggleDone(index);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '🗑';
+        deleteBtn.onclick = () => deleteTask(index);
+
+        actions.appendChild(toggleBtn);
+        actions.appendChild(deleteBtn);
+        li.appendChild(actions);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (text === '') return;
+
+      tasks.push({ text, done: false });
+      updateStorage();
+      taskInput.value = '';
+      renderTasks();
+    }
+
+    function toggleDone(index) {
+      tasks[index].done = !tasks[index].done;
+      updateStorage();
+      renderTasks();
+    }
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      updateStorage();
+      renderTasks();
+    }
+
+    function updateStorage() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Initial render
+    renderTasks();
+  </script>
+</body>
+</html>
